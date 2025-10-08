@@ -64,6 +64,7 @@ jobs:
             --paths=. \
             --contents-directory . \
             --name="Class Widgets 2" \
+            --target-arch universal2 \ 
             src/app.py
 
       - name: 📦 Zip build (Windows)
