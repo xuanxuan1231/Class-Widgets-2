@@ -32,7 +32,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }
+    runs-on: ${{ matrix.os }}
     continue-on-error: true
     strategy:
       
