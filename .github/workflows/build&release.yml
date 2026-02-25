@@ -67,7 +67,6 @@ jobs:
             --add-data "src/plugins:src/plugins" \
             --add-data "assets:assets" \
             --add-data "LICENSE:." \
-            --paths=. \
             --contents-directory . \
             --name="Class Widgets 2" \
             src/app.py
