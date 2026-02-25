@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import RinUI
-import Widgets
+import ClassWidgets.Theme
 import Qt5Compat.GraphicalEffects
 import ClassWidgets.Easing
 
@@ -43,6 +43,10 @@ Widget {
     // 初始状态设置
     Component.onCompleted: {
         actualVisible = shouldShow
+        // 通知 Python 端 QML 已准备就绪
+        if (AppCentral && AppCentral.notification) {
+            AppCentral.notification.notifyQmlReady()
+        }
     }
 
     // 宽度控制 - 只有在真正不可见时才设置为0
@@ -181,9 +185,11 @@ Widget {
     }
 
     // 订阅后端通知
+    property var notificationTarget: AppCentral.notification
     Connections {
-        target: AppCentral.notification
+        target: notificationTarget
         function onNotified(payload) {
+            if (!payload) return
             // 设置新通知内容
             notificationTitle = payload.title || ""
             notificationMessage = payload.message || ""
@@ -233,6 +239,7 @@ Widget {
         RowLayout {
             spacing: 12
             MarqueeTitle {
+                id: titleLabel
                 color: "#FFF"
                 text: editMode ? qsTr("No notification yet") : notificationTitle
                 maximumWidth: 150
@@ -242,7 +249,7 @@ Widget {
                 Layout.preferredWidth: 2
                 color: Qt.alpha("#FFF", 0.35)
                 Layout.fillHeight: true
-                visible: messageLabel.text
+                visible: messageLabel.text ? !!titleLabel.text : false
             }
             MarqueeTitle {
                 id: messageLabel
